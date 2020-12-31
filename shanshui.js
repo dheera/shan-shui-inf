@@ -1,11 +1,10 @@
-<script id="PRNG">
   var Prng = new function() {
     this.s = 1234;
     this.p = 999979; //9887//983
     this.q = 999983; //9967//991
     this.m = this.p * this.q;
     this.hash = function(x) {
-      var y = window.btoa(JSON.stringify(x));
+      var y = "foo"; // window.btoa(JSON.stringify(x));
       var z = 0;
       for (var i = 0; i < y.length; i++) {
         z += y.charCodeAt(i) * Math.pow(128, i);
@@ -57,10 +56,10 @@
   Math.seed = function(x) {
     return Prng.seed(x);
   };
-</script>
-
-<script>
+  
   function parseArgs(key2f) {
+    return;
+    /*
     var par = window.location.href.split("?")[1];
     if (par == undefined) {
       return;
@@ -74,6 +73,7 @@
         console.log(e);
       }
     }
+    */
   }
   SEED = "" + new Date().getTime();
   parseArgs({
@@ -83,9 +83,7 @@
   });
   Math.seed(SEED);
   console.log(Prng.seed);
-</script>
-
-<script id="PerlinNoise">
+  
   //https://raw.githubusercontent.com/processing/p5.js/master/src/math/noise.js
   var Noise = new function() {
     var PERLIN_YWRAPB = 4;
@@ -201,9 +199,7 @@
       }
     };
   }();
-</script>
-
-<script id="PolyTools">
+  
   var PolyTools = new function() {
     this.midPt = function() {
       var plist =
@@ -380,9 +376,7 @@
       }
     };
   }();
-</script>
-
-<script id="Util">
+  
   function unNan(plist) {
     if (typeof plist != "object" || plist == null) {
       return plist || 0;
@@ -508,9 +502,7 @@
       "'/>";
     return canv;
   }
-</script>
-
-<script>
+  
   console.log("************************************************");
 
   function stroke(ptlist, args) {
@@ -3821,8 +3813,8 @@
     cwid: 512,
     cursx: 0,
     lasttick: 0,
-    windx: 3000,
-    windy: 800,
+    windx: 1066, // 3000,
+    windy: 800, // 800,
     planmtx: [],
   };
 
@@ -3983,8 +3975,8 @@
     }
   }
 
-  document.addEventListener("mousemove", onMouseUpdate, false);
-  document.addEventListener("mouseenter", onMouseUpdate, false);
+//  document.addEventListener("mousemove", onMouseUpdate, false);
+//  document.addEventListener("mouseenter", onMouseUpdate, false);
   mouseX = 0;
   mouseY = 0;
   function onMouseUpdate(e) {
@@ -4017,16 +4009,15 @@
   function update() {
     //console.log("update!")
 
-    self.chunkloader(MEM.cursx, MEM.cursx + MEM.windx);
-    self.chunkrender(MEM.cursx, MEM.cursx + MEM.windx);
+    chunkloader(MEM.cursx, MEM.cursx + MEM.windx);
+    chunkrender(MEM.cursx, MEM.cursx + MEM.windx);
 
-    document.getElementById("BG").innerHTML =
-      "<svg id='SVG' xmlns='http://www.w3.org/2000/svg' width='" +
+    return "<svg id='SVG' xmlns='http://www.w3.org/2000/svg' width='" +
       MEM.windx +
       "' height='" +
       MEM.windy +
       "' style='mix-blend-mode:multiply;'" +
-      "viewBox = '" +
+      " viewBox='" +
       calcViewBox() +
       "'" +
       "><g id='G' transform='translate(" +
@@ -4038,9 +4029,7 @@
 
     //setTimeout(update,1000);
   }
-</script>
-
-<script id="downloader">
+  
   function download(filename, text) {
     var element = document.createElement("a");
     element.setAttribute(
@@ -4053,9 +4042,7 @@
     element.click();
     document.body.removeChild(element);
   }
-</script>
-
-<script id="UI">
+  
   function xcroll(v) {
     MEM.cursx += v;
     if (needupdate()) {
@@ -4130,232 +4117,7 @@
     //window.location.reload(true)
   }
   var btnHoverCol = "rgba(0,0,0,0.1)";
-</script>
-
-<body style="margin:0">
-  <div
-    id="SETTING"
-    style="
-    position:fixed; 
-    z-index:1000; 
-    left: 40; 
-    top: 3;
-    "
-  >
-    <div
-      id="SET_BTN"
-      style="
-      width:32;
-      height:32;
-      color:rgba(0,0,0,0.4);
-      border: 1px solid rgba(0,0,0,0.4);
-      text-align: center;
-      display: table;
-      cursor: pointer;
-      "
-      onmouseover="document.getElementById('SET_BTN').style.backgroundColor=btnHoverCol"
-      onmouseout="document.getElementById('SET_BTN').style.backgroundColor='rgba(0,0,0,0)'"
-      onclick="toggleVisible('MENU');toggleText('SET_BTN.t','&#x2630;','&#x2715;')"
-      title="Settings"
-    >
-      <div style="display:table-cell; vertical-align: middle;">
-        <font id="SET_BTN.t" size="4px"> &#x2630; </font>
-      </div>
-      <script>
-        window.addEventListener("scroll", function(e) {
-          document.getElementById("SETTING").style.left = Math.max(
-            4,
-            40 - window.scrollX
-          );
-        });
-      </script>
-    </div>
-    <div style="height:4px"></div>
-    <div
-      id="MENU"
-      style="
-      display:none;
-      background-color: rgba(0,0,0,0.1);
-      border: 1px solid rgba(0,0,0,0.4);
-      "
-    >
-      <table>
-        <tr>
-          <td><pre>SEED</pre></td>
-        </tr>
-        <tr>
-          <td>
-            <input title="random seed" id="INP_SEED" />
-            <button
-              onclick="reloadWSeed(document.getElementById('INP_SEED').value)"
-            >
-              Generate
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td><pre>VIEW</pre></td>
-        </tr>
-        <tr>
-          <td>
-            <button
-              title="view left"
-              onclick="xcroll(-parseFloat(document.getElementById('INC_STEP').value))"
-            >
-              <
-            </button>
-            <input
-              title="increment step"
-              id="INC_STEP"
-              type="number"
-              value="200"
-              min="0"
-              max="10000"
-              step="20"
-            />
-            <button
-              title="view right"
-              onclick="xcroll(parseFloat(document.getElementById('INC_STEP').value))"
-            >
-              >
-            </button>
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <pre><input id = "AUTO_SCROLL" type="checkbox" 
-            onchange="autoxcroll(parseFloat(document.getElementById('INC_STEP').value))">Auto-scroll</pre>
-          </td>
-
-          <td></td>
-        </tr>
-
-        <tr>
-          <td><pre>SAVE</pre></td>
-        </tr>
-        <tr>
-          <td>
-            <button
-              title="WARNING: This may take a while..."
-              type="button"
-              id="dwn-btn"
-              value="Download as SVG"
-              onclick="download(''+(Math.random())+'.svg', document.getElementById('BG').innerHTML);"
-            >
-              Download as .SVG
-            </button>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  <div
-    id="SOURCE_BTN"
-    style="
-      position:fixed; 
-      z-index:1000; 
-      left: 77; 
-      top: 3;
-      width:32;
-      height:32;
-      color:rgba(0,0,0,0.4);
-      border: 1px solid rgba(0,0,0,0.4);
-      text-align: center;
-      display: table;
-      cursor: pointer;"
-    onmouseover="document.getElementById('SOURCE_BTN').style.backgroundColor=btnHoverCol"
-    onmouseout="document.getElementById('SOURCE_BTN').style.backgroundColor='rgba(0,0,0,0)'"
-    onclick="window.location='https://github.com/LingDong-/shan-shui-inf';"
-    title="Fork me on Github!"
-  >
-    <div style="display:table-cell; vertical-align: middle;">
-      <font id="SET_BTN.t" size="4px"> &lt;/&gt; </font>
-    </div>
-    <script>
-      window.addEventListener("scroll", function(e) {
-        document.getElementById("SOURCE_BTN").style.left = Math.max(
-          41,
-          77 - window.scrollX
-        );
-      });
-    </script>
-  </div>
-
-  <table style="border-bottom: 1px solid rgba(0,0,0,0.1);">
-    <tr>
-      <td>
-        <div
-          id="L"
-          onmouseover="rstyle('L',true)"
-          onmouseout="rstyle('L',false)"
-          onclick="xcroll(-200)"
-        >
-          <div id="L.t"><font size="6px">&#x3008;</font></div>
-          <script>
-            rstyle("L", false);
-          </script>
-        </div>
-      </td>
-
-      <td>
-        <div id="BG">
-          <script>
-            MEM.lasttick = new Date().getTime();
-            document.getElementById("INP_SEED").value = SEED;
-            document
-              .getElementById("BG")
-              .setAttribute("style", "width:" + MEM.windx + "px");
-            update();
-            document.body.scrollTo(0, 0);
-            console.log(["SCROLLX", window.scrollX]);
-            present();
-            //draw();
-          </script>
-        </div>
-      </td>
-
-      <td>
-        <div
-          id="R"
-          onmouseover="rstyle('R',true)"
-          onmouseout="rstyle('R',false)"
-          onclick="xcroll(200)"
-        >
-          <div id="R.t"><font size="6px">&#x3009;</font></div>
-          <script>
-            rstyle("R", false);
-          </script>
-        </div>
-      </td>
-    </tr>
-  </table>
-</body>
-
-<canvas id="bgcanv" width="512" height="512" hidden> </canvas>
-<script>
-  var canvas = document.getElementById("bgcanv");
-  var ctx = canvas.getContext("2d");
-  var reso = 512;
-
-  for (var i = 0; i < reso / 2 + 1; i++) {
-    for (var j = 0; j < reso / 2 + 1; j++) {
-      var c = 245 + Noise.noise(i * 0.1, j * 0.1) * 10;
-      c -= Math.random() * 20;
-
-      var r = c.toFixed(0);
-      var g = (c * 0.95).toFixed(0);
-      var b = (c * 0.85).toFixed(0);
-      ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-      ctx.fillRect(i, j, 1, 1);
-      ctx.fillRect(reso - i, j, 1, 1);
-      ctx.fillRect(i, reso - j, 1, 1);
-      ctx.fillRect(reso - i, reso - j, 1, 1);
-    }
-  }
-  var img = canvas.toDataURL("image/png");
-  document.getElementById("BG").style.backgroundImage = "url(" + img + ")";
-  document.getElementsByTagName("body")[0].style.backgroundImage =
-    "url(" + img + ")";
-</script>
+ 
+ 
+fs = require('fs');
+fs.writeFile("shanshui.svg", update(), (err, data) => console.log(err));
