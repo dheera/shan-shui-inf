@@ -1,10 +1,18 @@
-  var Prng = new function() {
+const btoa = str => {
+    try {
+        return btoa(str);
+    } catch(err) {
+        return Buffer.from(str).toString('base64')
+    }
+};
+
+var Prng = new function() {
     this.s = 1234;
     this.p = 999979; //9887//983
     this.q = 999983; //9967//991
     this.m = this.p * this.q;
     this.hash = function(x) {
-      var y = "foo"; // window.btoa(JSON.stringify(x));
+      var y = btoa(JSON.stringify(x));
       var z = 0;
       for (var i = 0; i < y.length; i++) {
         z += y.charCodeAt(i) * Math.pow(128, i);
